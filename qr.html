@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate QR Code</title>
+</head>
+<body>
+  <h2>Generate QR Code for Your Grocery List</h2>
+  <form id="qrForm">
+    <input type="text" id="qrData" placeholder="Enter grocery list" required>
+    <button type="submit">Generate QR Code</button>
+  </form>
+
+  <div id="qrCodeContainer" style="margin-top: 20px;">
+    <img id="qrCodeImage" src="" alt="QR Code" style="max-width: 300px; display: none;">
+  </div>
+
+  <script>
+    document.getElementById('qrForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const qrData = document.getElementById('qrData').value;
+
+      // Send a POST request to the backend API to generate the QR code
+      const response = await fetch('http://localhost:5000/generate-qr', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: qrData }),
+      });
+
+      const result = await response.json();
+
+      // If QR code generated successfully, show it
+      if (result.success) {
+        const qrCodeImage = document.getElementById('qrCodeImage');
+        qrCodeImage.src = result.qrCodeImage;
+        qrCodeImage.style.display = 'block';
+      } else {
+        alert(result.message);
+      }
+    });
+  </script>
+</body>
+</html>
