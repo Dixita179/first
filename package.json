@@ -19,7 +19,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.3",
     "qrcode": "^1.5.4",
-    "razorpay": "^2.9.5"
+    "razorpay": "^2.9.5",
+    "react-scripts": "^5.0.1"
   },
   "description": ""
 }
