@@ -1,89 +1,436 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Website</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/11.1.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/11.1.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/11.1.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/11.1.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/11.1.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/11.1.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/11.1.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/11.1.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/11.1.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/11.1.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: lavender;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
+        .header {
+            height: 80px;
+            width: 100%;
+            background-color: rgb(48, 205, 48);
+            border-radius: 3px;
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: white;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            padding: 5px;
+        }
+
+        .search-bar button {
+            padding: 5px 10px;
+            background-color: #fff;
+            color: #00C853;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cart {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 7px 10px;
+            border-radius: 3px;
+            width: 80px;
+            transition: transform 0.3s ease;
+        }
+
+        .cart:hover {
+            transform: scale(1.1);
+        }
+
+        .cart p {
+            height: 22px;
+            width: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 22px;
+            background-color: rgb(48, 205, 48);
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        #root {
+    width: 90%; /* Increased width for the container */
+    margin: 0 auto; /* Center align the container */
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 images per row */
+    gap: 20px; /* Gap between the images */
+}
+
+
+
+        .sidebar {
+            width: 40%;
+            border-radius: 5px;
+            background-color: #eee;
+            margin-left: 20px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .head {
+            background-color: rgb(48, 205, 48);
+            border-radius: 3px;
+            height: 40px;
+            padding: 10px;
+            margin-bottom: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0px;
+            padding: 35px 600px;
+            border-top: 1px solid #333;
+            font-size: 50px;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid rgb(48, 205, 48);
+            border-radius: 5px;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 250px;
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .img-box {
+    width: 100%;
+    height: 250px; /* Adjusted height for better image display */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 5px;
+    position: relative;
+}
+
+.images {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* Ensures the image fully covers the container */
+    object-position: center; /* Keeps the image centered */
+    transition: transform 0.3s ease;
+}
+
+.box:hover .images {
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+
+        .bottom {
+            margin-top: 20px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: red;
+        }
+
+        button {
+            width: 100%;
+            position: relative;
+            border: none;
+            border-radius: 5px;
+            background-color: rgb(48, 205, 48);
+            padding: 7px 25px;
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: white;
+            border-bottom: 1px solid #aaa;
+            border-radius: 3px;
+            margin: 10px 10px;
+        }
+
+        .row-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rowimg {
+            max-width: 43px;
+            max-height: 43px;
+            border-radius: 50%;
+        }
+
+        footer {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .design {
+    display: flex; /* Use flexbox to align items */
+    flex-direction: row; /* Align items horizontally */
+    align-items: center; /* Center items vertically */
+    justify-content: left; /* Center the entire content */
+    text-align: right;
+    font-weight: bold;
+    font-size: 50px;
+    padding-right: 100%;
+    padding-top: 5%;
+}
+
+.picture {
+    margin-left: 50px; /* Space between the image and text */
+}
+
+.picture img {
+    width: 600px;
+    height: 250px;
+    display: block;
+    position: relative;
+    left: 200%; /* Optional - adjust if you want to shift the image more */
+    top: 0; /* Ensure the image stays aligned */
+    mix-blend-mode: multiply;
+}
+
+.design p {
+    color: #039540;
+    font-size: 38px;
+}
+
+
+        #my-cart {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .fa-trash:hover {
+            cursor: pointer;
+            color: #333;
+        }
     </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+</head>
+<body>
+    <div class="header">
+        <p class="logo">Grocery Mart</p>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="my_orders.html">My Orders</a></li>
+                <li><a href="Register.html">Register</a></li>
+                <li><a href="Login.html">Login</a></li>
+                <li><a href="Login2.html">Dashboard</a></li>
+            </ul>
+        </nav>
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+            <button>Search</button>
+        </div>
+
+        <div class="cart" id="cart-icon">
+            <div class="icon">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+                </svg>
+            </div>
+            <p id="count">0</p>
+        </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+
+    <div class="design">
+        <div class="picture">
+            <img src="grocery.jpg">
+        </div>
+        <p>Fresh Grocery</p>
+        <br><br> 
+    </div>
+
+    <div class="container">
+        <div id="root"></div>
+        <div class="sidebar" id="my-cart">
+            <div class="head">
+                <p>My Cart</p>
+            </div>
+            <div id="cartItem">Your cart is empty</div>
+            <div class="foot">
+                <h3>Total</h3>
+                <h2 id="total">$ 0.00</h2>
+            </div>
+            <li><a href="payment.html"><button>CheckOut</button></a></li>
+            <li><a href="qr.html"><button>Generate QR Code</button></a></li>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Grocery Mart. All Rights Reserved.</p>
+    </footer>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        const product = [
+            { id: 0, image: 'apple.jpg', title: 'Apples', price: 30 },
+            { id: 1, image: 'lemon.jpg', title: 'Lemons', price: 10 },
+            { id: 3, image: 'spinach.jpg', title: 'Spinach', price: 20 },
+            { id: 4, image: 'raddish.jpg', title: 'Raddish', price: 40 },
+            { id: 5, image: 'peas.jpg', title: 'Peas', price: 15 },
+            { id: 6, image: 'dragonfruit.jpg', title: 'Dragon Fruit', price: 15 },
+            { id: 7, image: 'avocado.jpg', title: 'Avocado', price: 45 },
+            { id: 8, image: 'tomato.jpg', title: 'Tomato', price: 20 },
+            
+            { id: 11, image: 'aata.jpg', title: 'Ashirvaad Flour', price: 45 },
+            { id: 12, image: 'potato.jpg', title: 'Potato', price: 29 },
+            { id: 13, image: 'coconut.jpg', title: 'Coconut', price: 20 },
+            { id: 14, image: 'rice.jpg', title: 'Basmati Rice', price: 250 },
+            { id: 15, image: 'Oreo.jpg', title: 'Oreo Biscuit', price: 10 },
+            { id: 16, image: 'Refine.jpg', title: 'Refined Oil', price: 190 },
+            { id: 17, image: 'hair.jpg', title: 'Coconut Oil', price: 60 },
+            { id: 18, image: 'grapes.jpg', title: 'Grapes', price: 45 },
+            { id: 19, image: 'corn.jpg', title: 'Corns', price: 20 },
+            { id: 20, image: 'capsicum.jpg', title: 'Capsicums', price: 30 }
+        ];
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+        let cart = [];
+
+        function addtocart(a) {
+            cart.push({ ...product[a] });
+            displaycart();
         }
-      });
+
+        function delElement(a) {
+            cart.splice(a, 1);
+            displaycart();
+        }
+
+        function displaycart() {
+            let total = 0;
+            document.getElementById("count").innerHTML = cart.length;
+            if (cart.length == 0) {
+                document.getElementById('cartItem').innerHTML = "Your cart is empty";
+                document.getElementById("total").innerHTML = "$ 0.00";
+            } else {
+                document.getElementById("cartItem").innerHTML = cart.map((items, index) => {
+                    const { image, title, price } = items;
+                    total += price;
+                    return (
+                        `<div class='cart-item'>
+                            <div class='row-img'>
+                                <img class='rowimg' src=${image}>
+                            </div>
+                            <p style='font-size:12px;'>${title}</p>
+                            <h2 style='font-size: 15px;'>$ ${price}.00</h2>
+                            <i class='fa-solid fa-trash' onclick='delElement(${index})'></i>
+                        </div>`
+                    );
+                }).join('');
+                document.getElementById("total").innerHTML = "$ " + total + ".00";
+            }
+        }
+
+        document.getElementById("cart-icon").addEventListener("click", function () {
+            const cart = document.getElementById("my-cart");
+            cart.style.display = cart.style.display === "none" || cart.style.display === "" ? "block" : "none";
+        });
+
+        document.getElementById('root').innerHTML = product.map((item, index) => {
+            return (
+                `<div class='box'>
+                    <div class='img-box'>
+                        <img class='images' src=${item.image} alt='${item.title}' />
+                    </div>
+                    <div class='bottom'>
+                        <p>${item.title}</p>
+                        <h2>$ ${item.price}.00</h2>
+                        <button onclick='addtocart(${index})'>Add to cart</button>
+                    </div>
+                </div>`
+            );
+        }).join('');
     </script>
-  </body>
+</body>
 </html>

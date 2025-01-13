@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayPal Payment</title>
+  <script src="https://www.paypal.com/sdk/js?client-id=AYBQcfg0zH9LsWg9-4NQaunQSFosXIeShrc2NfgyA2i6N5saeKd-cV5G85H7lMEKG1X-hvwCLVq195P2&components=buttons"></script> <!-- PayPal SDK -->
+  <style>
+    /* Basic Styles for Body */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4; /* Light gray background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* Container Styling */
+    .container {
+      background-color: #ffffff; /* White background for the form container */
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    /* Header Styling */
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    /* Message Styling */
+    .loading {
+      font-size: 18px;
+      color: #555;
+      display: none; /* Initially hidden */
+    }
+
+    /* PayPal Button Container */
+    #paypal-button-container {
+      margin-top: 20px;
+    }
+
+    /* Additional Styles for Buttons */
+    button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Complete Your Payment</h2>
+    <p class="loading">Please wait while we set up your payment...</p> <!-- Loading message -->
+    <div id="paypal-button-container"></div> <!-- PayPal button will be rendered here -->
+  </div>
+
+  <script>
+    paypal.Buttons({
+      // Set up the transaction
+      createOrder: function(data, actions) {
+        document.querySelector('.loading').style.display = 'block'; // Show loading message
+        return fetch('http://localhost:5000/create-paypal-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ amount: 500 }), // Amount to be paid (e.g., 5 USD)
+        })
+        .then(res => res.json())
+        .then(orderData => {
+          return orderData.orderID; // Return orderID from the backend
+        })
+        .catch(error => {
+          alert('Error creating order: ' + error.message);
+          document.querySelector('.loading').style.display = 'none'; // Hide loading message on error
+        });
+      },
+
+      // Execute the payment
+      onApprove: function(data, actions) {
+        return fetch('http://localhost:5000/execute-paypal-payment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            orderID: data.orderID,
+            payerID: data.payerID,
+          }),
+        })
+        .then(res => res.json())
+        .then(paymentData => {
+          document.querySelector('.loading').style.display = 'none'; // Hide loading message
+          if (paymentData.message === 'Payment successful') {
+            alert('Payment completed successfully');
+          }
+        })
+        .catch(error => {
+          alert('Error executing payment: ' + error.message);
+          document.querySelector('.loading').style.display = 'none'; // Hide loading message on error
+        });
+      },
+
+      // Handle payment cancellation
+      onCancel: function(data) {
+        document.querySelector('.loading').style.display = 'none'; // Hide loading message
+        alert('Payment cancelled');
+      },
+    }).render('#paypal-button-container'); // Render the PayPal button
+  </script>
+</body>
+</html>
